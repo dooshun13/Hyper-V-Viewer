@@ -1,151 +1,194 @@
-# Hyper-V Viewer v1 — Design Spec
+# Hyper-V Viewer v1 — Design (Phase 1: Hyper-V host)
 
-- **Date:** 2026-11-13
-- **Status:** Draft for owner review
-- **Repo:** `dooshun13/Hyper-V-Viewer`
-- **Built from:** Eviewer (`dooshun13/eviewer`, commit `772c165`), copied and renamed to `HvViewer.*`. Eviewer's spec is in `docs/eviewer-base/superpowers/specs/` and still describes everything this spec does not change.
+- **Date:** 2026-11-13 (replaces the first draft of the same date)
+- **Status:** Draft for owner approval
+- **Repo:** `dooshun13/Hyper-V-Viewer`. Code base: Eviewer copied and renamed to `HvViewer.*` (already on `main`).
+- **Phase 2 (later plan):** SCVMM. Not part of this document except where noted.
 
-## 1. Purpose
+## 1. Intent
 
-Debugging a Hyper-V host means reading a dozen event logs (VMMS, Worker, Hypervisor, VmSwitch, StorageVSP, High-Availability, Integration, failover cluster, System) and matching events to the VM they are about. Hyper-V Viewer puts these in one read-only viewer: within about 30 seconds of opening it on a host, an admin can answer *which VMs are unhealthy, what went wrong recently, and where do I look?*
+Admins and engineers troubleshoot Hyper-V every day. The question they ask most is:
 
-**Users:** system admins troubleshooting Windows Server Hyper-V hosts and clusters, including **production** hosts.
+> **Why did this VM restart or power off, and where has it been over the last 7 days?**
 
-**Success criteria**
+Today that means opening a dozen event logs on the host and lining events up by hand. Hyper-V Viewer does the lining up: for any VM it shows, in time order, every start, stop, reset, crash and move, using **Windows' own log messages**, and adds a short hint **only when the cause is certain**.
 
-1. Copy the `HvViewer` folder to a host, run `HvViewer.exe`, and see the host's VMs and a useful 24-hour Hyper-V summary with no installation.
-2. Open any VM's events from the VM list in one click.
-3. Every important Hyper-V event comes with a plain-English explanation and a next step.
-4. Running it has no noticeable impact on the host and changes nothing on it (§4).
+It runs **locally on the Hyper-V host** and is strictly read-only, so it is safe on production hosts.
 
-## 2. Scope
+## 2. Goals, non-goals, anti-goals
 
-### In scope (v1)
+**Goals**
+1. Pick a VM, see its last 7 days of lifecycle events (start, shut down, turn off, save, reset, crash, migrate, cluster move) with the original messages, in one list.
+2. See host-level events that affect every VM on the host (host reboot or power loss, Hyper-V management service stop, cluster node loss) in each VM's list.
+3. See where the VM has been (this host's view of arrivals and departures).
+4. Know how far back the logs actually go.
+5. Keep every Eviewer feature (Home, Events search, detail, Saved, Settings) and add Hyper-V logs and troubleshooters.
 
-Everything in Eviewer v1 as amended (Home, Events search, event detail, Saved, Settings, the 11 general troubleshooters), plus:
+**Non-goals (Phase 1)**
+- SCVMM (Phase 2: VMM job history with read-only `Get-SCJob` / `Find-SCJob`, plus the VMM event logs).
+- Running inside VMs (guest mode). Host only.
+- Remote hosts or multi-host views.
+- Any action on a VM or the host.
 
-- **Hyper-V log channels** (§5.1), shown first in the log picker under a "Hyper-V" folder.
-- **9 Hyper-V troubleshooters** (§5.2), shown first on Home.
-- **Virtual machines screen** (§5.3): read-only list of the host's VMs with state, health, uptime, vCPUs, memory, generation and configuration version.
-- **Per-VM event filter** (§5.4): all Hyper-V events about one VM, matched by its VM ID.
-- **Server guardrails** (§4), restored from the original Eviewer design.
+**Anti-goals (a failure even if it works)**
+- The app **states a cause it is not sure of**. A wrong hint is worse than none.
+- The app changes anything on the host, or slows a busy host down.
+- The app silently shows less history than asked for (for example because a log is small) without saying so.
 
-### Out of scope
+## 3. Constraints
 
-- Any action on a VM or the host: start, stop, save, checkpoint, migrate, connect to the console, change settings.
-- Remote hosts and multi-host / cluster-wide views (v1 reads the local host only).
-- VM CPU and memory **usage** graphs (needs performance counters over time; later).
-- SCVMM, opening `.evtx` files, live tail, alerts, installer, translated UI.
+- **Local only**: reads this host's event logs and this host's WMI.
+- **Guardrails** (from Eviewer's original design, restored): viewer only; Hyper-V WMI with `SELECT` queries only, no WMI method calls; below-normal priority; at most 2 parallel readers; scans stop at 500,000 events or 1 GB managed memory and keep partial results; only files written are `%AppData%\HvViewer\HvViewer.settings.json` and exports the user saves; a safety test scans the compiled code for forbidden calls.
+- **Language**: English UI; must work on French Windows. Match events by provider + event ID + log internal name, never by message text.
+- **Log retention**: Hyper-V logs are often small and may not reach back 7 days. The app cannot change log sizes (viewer only).
+- **Platform**: Windows Server 2016–2025 with Hyper-V (Desktop Experience); Windows 10/11 with Hyper-V for testing. .NET 10, WPF + WPF-UI, as Eviewer.
 
-## 3. Platform and packaging
+## 4. Approaches considered
 
-- **Supported OS:** Windows Server 2016, 2019, 2022 and 2025 with the Hyper-V role and Desktop Experience; Windows 10 and 11 with Hyper-V enabled (for testing). Server Core and Hyper-V Server are not supported for the UI.
-- On a machine without Hyper-V the app still works as a general event viewer; the VM screen says Hyper-V is not installed and Hyper-V tiles show "—".
-- **Stack, packaging, build:** as Eviewer (.NET 10, WPF + WPF-UI, x64, portable folder, GitHub Actions on a Windows runner).
+| Approach | Trade-off | Decision |
+|---|---|---|
+| **Smart engine**: a VM story engine reads known lifecycle events into one list per VM, shows the original messages, adds a hint only when a rule is certain | Biggest build; the hint rules need care | **Chosen** by the owner |
+| **Smart search**: preset searches per VM showing raw events | Cheap, but the admin still works out the cause; no placement view | Not chosen; kept as the "Show all events for this VM" link |
 
-## 4. Guardrails (restored for production hosts)
+Owner decisions: local only; host only (no guest mode); smart engine; **show the log messages, add a hint only when sure**; SCVMM later.
 
-Hyper-V Viewer runs on production hosts, so Eviewer's 2026-11-11 decision to drop the guardrails is reversed:
+## 5. What the admin sees
 
-| Guardrail | Rule |
-|---|---|
-| Viewer only | Never clears, writes or reconfigures event logs; never writes the registry; never changes services, tasks, drivers or settings. |
-| No Hyper-V changes | `root\virtualization\v2` is used only with WQL `SELECT` queries. No WMI method calls at all. Never `Win32_Product`. |
-| Process priority | `BelowNormal` at start-up. |
-| Parallel readers | At most **2** threads format messages in parallel. |
-| Event limit | A dashboard scan or search stops after **500,000** events read and keeps what it has. |
-| Memory limit | A scan or search stops when the process's managed memory passes **1 GB**. |
-| Telling the user | When a limit stops a scan, the "logs skipped" line says which limit and asks to narrow the range. |
-| Files | Only `%AppData%\HvViewer\HvViewer.settings.json` and exports the user saves. No temp files, logs or network access. |
-| Safety test | A test reads the compiled assemblies' metadata and fails the build if any forbidden function, method or WMI method name is referenced (§8). |
+### 5.1 VMs screen (the main screen)
 
-Limits are constants in `ResourceLimits` for v1 (not user settings).
+```
+ VMs on HOST01                                   history back to: 2026-11-08 (Worker-Admin)
+ ┌───────────────┬─────────┬─────────┬─────────────────────────────────────────┐
+ │ Name          │ State   │ Uptime  │ Last stop or restart                    │
+ ├───────────────┼─────────┼─────────┼─────────────────────────────────────────┤
+ │ SQL01         │ Running │ 2 h     │ 11-13 02:14  Host restarted             │
+ │ WEB02         │ Running │ 6 d     │ 11-07 21:00  'WEB02' was shut down …    │
+ │ DC03          │ Off     │ —       │ 11-13 09:41  'DC03' was turned off …    │
+ └───────────────┴─────────┴─────────┴─────────────────────────────────────────┘
+   [Story]  [All events]  [Copy VM ID]                                  [Refresh]
+```
 
-## 5. Hyper-V features
+- Read-only list from WMI: name, state, health, uptime, vCPUs, memory, generation, configuration version, VM ID.
+- **Last stop or restart**: the newest lifecycle event for the VM, as its original message (short form), with time.
+- **Story** opens 5.2. **All events** opens Events filtered on the VM ID (all Hyper-V logs + System, last 7 days).
 
-### 5.1 Log channels
+### 5.2 VM story (per VM, default last 7 days)
 
-`HyperVChannels` (Core) lists the channels the app knows, by internal name. The log picker shows every installed channel whose name starts with `Microsoft-Windows-Hyper-V-` in a top-level **Hyper-V** folder, plus `Microsoft-Windows-FailoverClustering/Operational` when present. Key channels:
+```
+ SQL01 — story, last 7 days                         [1 d] [7 d] [Custom]
+ 2026-11-13 02:16  Worker-Admin 18500   'SQL01' started successfully. (Virtual machine ID …)
+ 2026-11-13 02:14  System 6005          The Event log service was started.
+ 2026-11-13 02:13  System 41            The system has rebooted without cleanly shutting down first…
+                   Hint: the host restarted without a clean shutdown; every VM on it stopped.
+ 2026-11-10 18:02  System 1641          Cluster role 'SQL01' is moving from NODE2 to HOST01.
+ ⚠ Worker-Admin only goes back to 2026-11-08 09:12.                        [Raw events]
+```
 
-`Microsoft-Windows-Hyper-V-VMMS-Admin`, `-VMMS-Operational`, `-VMMS-Networking`, `-VMMS-Storage`, `-Worker-Admin`, `-Worker-Operational`, `-Hypervisor-Admin`, `-Hypervisor-Operational`, `-Compute-Admin`, `-Compute-Operational`, `-VID-Admin`, `-VmSwitch-Operational`, `-StorageVSP-Admin`, `-Integration-Admin`, `-High-Availability-Admin`, `-Config-Admin`.
+- Each line: time, log (short name), event ID, **Windows' message as formatted** (may be French), and the row opens the normal event detail.
+- **Hint** lines appear only under rows where a hint rule is certain (§6.3). No hint otherwise.
+- If a VM stopped or restarted and **no host-side cause** exists, no hint is invented. The row simply has no hint. (A fixed note at the top of the screen explains that a restart started inside the guest may leave no event on the host.)
+- **History coverage**: a warning line for any log whose oldest event is newer than the start of the range.
+- Export the story as HTML or CSV (Save dialog), and "Copy for ticket" (plain text).
 
-Windows has used both `…-Admin` and `…/Admin` spellings for some Hyper-V channels across versions. Rule matching treats `-` and `/` before the last segment as the same (`ChannelName.Same`), and the dashboard tries the other spelling when a channel is not found.
+### 5.3 Where the VM has been (inside the story)
 
-### 5.2 Hyper-V troubleshooters
+A small panel above the list: current host (this host), then each move this host recorded, newest first: "moved here from NODE2 at 11-10 18:02", "moved to NODE3 at …", using the move events in §6.1 and their own messages. Panel title says "as seen from this host". Full cross-host history comes with SCVMM in Phase 2.
 
-Nine new rule files, same schema as Eviewer (`schema: 1`), shown before the general ones. Event IDs were checked against Microsoft documentation, Microsoft Q&A threads with event XML, and vendor references on 2026-11-13; the owner should review them on a real host (§10).
+### 5.4 Everything else
 
-| Id | Title | Log | Provider | Events (severity) |
-|---|---|---|---|---|
-| `hyperv-vm-start` | VM start failures | Worker-Admin | Hyper-V-Worker | 3040, 3031, 3112, 3320, 12010 (error) |
-| | | VMMS-Admin | Hyper-V-VMMS | 15130 (error), 14081 (error) |
-| `hyperv-vm-crashes` | VM crashes & resets | Worker-Admin | Hyper-V-Worker | 18560, 18590 (critical) |
-| `hyperv-live-migration` | Live migration | System | Hyper-V-High-Availability | 21502 (error) |
-| | | High-Availability-Admin | Hyper-V-High-Availability | 21502, 21111 (error) |
-| | | VMMS-Admin | Hyper-V-VMMS | 21026, 22040, 20408 (error) |
-| `hyperv-checkpoints` | Checkpoints & merges | VMMS-Admin | Hyper-V-VMMS | 18012 (error), 18014, 19100 (warning) |
-| | | Worker-Admin | Hyper-V-Worker | 3280 (error) |
-| `hyperv-replica` | Hyper-V Replica | VMMS-Admin | Hyper-V-VMMS | 32022, 32552, 32068 (error), 32315 (warning) |
-| `hyperv-networking` | Virtual switches | System | Hyper-V-VmSwitch | 22, 252 (warning) |
-| `hyperv-storage` | VM storage | StorageVSP-Admin | Hyper-V-StorageVSP | 6, 8 (error) |
-| | | VMMS-Admin | Hyper-V-VMMS | 12142, 14098 (error) |
-| `hyperv-integration` | Integration services | Integration-Admin | Hyper-V-Integration | 4000 (error), 4010 (warning) |
-| | | Integration-Admin | Hyper-V-Integration-KvpExchange | 4096 (info) |
-| `hyperv-host` | Hypervisor & host | System | Hyper-V-Hypervisor | 41, 38, 48 (critical) |
-| `failover-cluster` | Failover cluster | System | FailoverClustering | 1135, 1177 (critical), 1069, 1146, 1205 (error) |
+- Home, Events, Saved, Settings from Eviewer, with: Hyper-V logs in a "Hyper-V" log-picker folder; nine Hyper-V troubleshooters plus Failover cluster on Home (tiles capped at 12, three rows).
+- A **VMs** item in the icon bar between Home and Events.
 
-(Log and provider names are shortened; the full names start with `Microsoft-Windows-`.)
+## 6. The VM story engine
 
-Home shows at most **12** tiles (three rows): tiles that need attention first, then quiet tiles in rule order (Hyper-V first). A line under the tiles says how many quiet tiles are not shown.
+### 6.1 Lifecycle event catalog
 
-### 5.3 Virtual machines screen
+A JSON file (`src/HvViewer.Rules/Lifecycle/lifecycle.json`, embedded, schema-checked like the troubleshooters) lists the events that belong in a story. Each entry: provider, event ID, log, **kind** (`start`, `shutdown`, `turnoff`, `save`, `reset`, `crash`, `migrate`, `clustermove`, `hostdown`, `hostup`, `servicedown`), **scope** (`vm` = carries a VM ID; `host` = affects all VMs on the host), and **verified** (`true` when checked on a real host).
 
-A new **VMs** item in the icon bar, between Home and Events.
+Starting list (owner or builder confirms the ones marked *verify* on a real Server 2022/2025 host before shipping; unverified entries stay in the file with `verified: false` and are still shown, but never produce a hint):
 
-- **Source:** `HyperVInventory` (System) with WQL `SELECT` queries only, in `root\virtualization\v2`:
-  - `Msvm_ComputerSystem WHERE Caption = 'Virtual Machine'`: `Name` (VM ID), `ElementName`, `EnabledState`, `HealthState`, `OnTimeInMilliseconds`.
-  - `Msvm_VirtualSystemSettingData WHERE VirtualSystemType = 'Microsoft:Hyper-V:System:Realized'`: `VirtualSystemIdentifier`, `VirtualSystemSubType` (generation), `Version`.
-  - `Msvm_ProcessorSettingData` and `Msvm_MemorySettingData`: `InstanceID`, `VirtualQuantity` (vCPUs, startup MB), `DynamicMemoryEnabled`. Matched to the VM by the VM ID inside `InstanceID` (`Microsoft:<VM ID>\…`).
-- **Columns:** name, state (Running, Off, Saved, Paused, Starting, …), health (OK / Degraded / Critical), uptime, vCPUs, memory (MB, "dynamic" when on), generation, configuration version, VM ID.
-- **Actions:** *Show events* (opens Events with the per-VM filter, last 24 h), *Copy VM ID*, *Refresh*. Nothing else.
-- **States:** Hyper-V not installed (namespace missing), access denied ("Run as administrator or join Hyper-V Administrators"), no VMs, WMI error (message, nothing else breaks).
-- The state and health mappings are pure functions with unit tests; the WMI reader is a thin `IHyperVInventory` implementation tested with fakes.
+| Kind | Scope | Log | Provider | ID | Status |
+|---|---|---|---|---|---|
+| start | vm | Hyper-V-Worker-Admin | Hyper-V-Worker | 18500 | verified (Microsoft docs) |
+| turnoff | vm | Hyper-V-Worker-Admin | Hyper-V-Worker | 18502 | verified (Microsoft docs) |
+| shutdown | vm | Hyper-V-Worker-Admin | Hyper-V-Worker | 18504 | verified ID; timing ambiguous |
+| save | vm | Hyper-V-Worker-Admin | Hyper-V-Worker | 18508 | *verify* |
+| reset | vm | Hyper-V-Worker-Admin | Hyper-V-Worker | 18560 | verified |
+| crash | vm | Hyper-V-Worker-Admin | Hyper-V-Worker | 18590 | verified |
+| migrate | vm | Hyper-V-VMMS-Admin | Hyper-V-VMMS | migration started / completed IDs | *verify* (find on a host) |
+| migrate (failed) | vm | Hyper-V-High-Availability-Admin, System | Hyper-V-High-Availability | 21502 | verified |
+| migrate (failed) | vm | Hyper-V-VMMS-Admin | Hyper-V-VMMS | 21024, 21026 | verified |
+| clustermove | vm | System (and FailoverClustering/Operational) | FailoverClustering | 1641 | verified ID; *verify* log |
+| hostdown | host | System | Kernel-Power | 41 | verified |
+| hostdown | host | System | EventLog | 6008 | verified |
+| hostdown | host | System | User32 | 1074 | verified (planned restart, has user and reason) |
+| hostdown | host | System | EventLog | 6006 | verified (clean stop of event log service) |
+| hostup | host | System | EventLog | 6005 | verified |
+| servicedown | host | Hyper-V-VMMS-Admin | Hyper-V-VMMS | VMMS shutting down with VMs running | *verify* ID |
+| clustermove | host | System | FailoverClustering | 1135 | verified (node removed) |
 
-### 5.4 Per-VM event filter
+### 6.2 Building a story
 
-Hyper-V writes the VM ID (a GUID) into each VM-related event (`UserData/VmlEventLog/VmId` or event data). The filter is an ordinary `EventQuery`:
+1. Range: default last 7 days (Every query has a time range).
+2. Read only the catalog's IDs from each catalog log (XPath ID filter) within the range, under the resource guard.
+3. **VM events**: keep events whose event XML contains the VM's ID (GUID, case-insensitive). The ID is language-neutral.
+4. **Host events**: add every `host` scope event in the range to every VM that was running at that time on this host. "Was running" is inferred from the VM's own start/stop events; if unknown, the host event is still shown (it may have affected the VM), but with no hint.
+5. Sort newest first; group identical consecutive events (×N) as Eviewer does.
+6. Messages come from `MessageCache` / `FormatMessage`, exactly as Windows formats them. If a message cannot be formatted, show the event data fields (Eviewer's fallback).
+7. **Coverage**: for each catalog log, read its oldest event inside the range (one query, oldest first, one result); if it is much newer than the range start and the log is near its maximum size, add the warning line. (Still a time-ranged query.)
 
-- **Text:** the VM ID, **target:** raw XML, match case off.
-- **Logs:** every installed Hyper-V channel (§5.1) plus System; **range:** last 24 h by default.
-- It goes through the existing search engine, so the query line, grouping, export and detail view all work unchanged. The ID is language-neutral, so this works on French Windows.
+### 6.3 Hints: only when sure
 
-## 6. Architecture changes
+A hint is a fixed English sentence attached to one row. Hint rules live in the same JSON. A rule produces a hint **only if all of these hold**:
 
-- **Core:** `ResourceLimits`, `ResourceGuard` (event and memory checks, injectable clock-free memory reader), `ChannelName` (spelling-tolerant comparison), `HyperVChannels`. `SearchService` and `DashboardService` call the guard; `NativeEventSource` caps parallel formatting at 2.
-- **System:** `HyperVInventory`, `VmInfo`, `VmStateText`, `IHyperVInventory`, `WindowsHyperVInventory` (WMI, read-only).
-- **Rules:** nine new JSON files; built-in order puts Hyper-V first; `RuleSet` matching uses `ChannelName.Same`.
-- **App:** `VmsViewModel` + `VmsView`, a VMs nav item, Home tile cap, `LogCatalog` Hyper-V folder, below-normal priority at start-up.
+- every event it relies on has `verified: true`;
+- the match is by provider + ID + log (never message text), plus the VM ID where the rule is about one VM;
+- the events fall inside the rule's time window (for example, the VM's stop is within 5 minutes before a host `hostdown` event);
+- there is no competing explanation in the same window (for example, both a `crash` and a `hostdown` → no hint).
 
-## 7. Performance targets
+Starting hint rules (all others are left out of v1):
 
-As Eviewer §7, plus: VM list for 100 VMs in under 2 s. The CPU and memory rows are again **enforced** limits (§4), not just goals.
+| Rule | Shown under | Hint text (draft) |
+|---|---|---|
+| Host unclean restart | Kernel-Power 41 | "The host restarted without a clean shutdown. Every VM running on it stopped." |
+| Host planned restart | User32 1074 | "The host was restarted or shut down by the user or process named in this message." |
+| Guest crash | Worker 18590 | "The guest operating system crashed. The error codes are the guest's stop code." |
+| Triple-fault reset | Worker 18560 | "Hyper-V reset this VM after a fatal processor error inside the guest." |
+| Turned off | Worker 18502 | "The VM was turned off (like pulling the power), not shut down from inside." |
+| Cluster move after node loss | FailoverClustering 1641 within 10 min after 1135 | "This move followed a cluster node being removed from the cluster." |
+
+Hint texts are written by us, short and plain, never copied from Microsoft.
+
+### 6.4 Placement (where it has been)
+
+From the story's `migrate` and `clustermove` events for the VM: direction (here / away) and the other host's name come from the **event data fields** (not the message text). If the other host's name is not in the event data, the panel shows the event's message and no extracted name.
+
+## 7. Other features (my proposals, in priority order; the owner can cut any)
+
+1. **Host pulse** on Home: hypervisor running, VMMS running, cluster node state, host free memory, free space on VM storage paths and CSVs, virtual switch NIC links, pending reboot. Each green / amber / red with one line of why. All read-only queries.
+2. **Error-code decoder**: HRESULTs found in messages (e.g. `0x80070005`, `0x8007274C`) get their standard name and meaning from a built-in table, shown in the detail view only.
+3. **Checkpoints**: VMs with checkpoints, their age and type, and recovery checkpoints left by backup software. WMI `SELECT` only.
+4. **Replica health**: table of replica state, health and last replication time. WMI `SELECT` only.
+5. **Since your last visit**: on Home, what is new since the app was last opened (time stored in the settings file).
+6. **Copy as PowerShell**: each story and search offers the equivalent `Get-WinEvent -FilterXml` command.
 
 ## 8. Testing
 
-- All Eviewer tests carried over, renamed.
-- **Rule tests:** the §5.2 table is encoded in `BuiltInRulesTests`; every rule file loads with no errors.
-- **Guard tests:** event limit and memory limit stop a scan and a search and report the reason.
-- **ChannelName tests:** `X-Admin` equals `X/Admin`; unrelated names differ.
-- **VM tests:** state and health mapping, uptime text, VM ID extraction from `InstanceID`, inventory merge, view-model states (not installed, denied, empty, list), *Show events* builds the right query.
-- **Safety test:** reads every `HvViewer.*.dll` with `System.Reflection.Metadata` and fails if it finds references to forbidden APIs (`EvtClearLog`, `EvtSetChannelConfigProperty`, `EvtSaveChannelConfig`, `ClearLog`, `RegistryKey.SetValue/CreateSubKey/DeleteSubKey*/DeleteValue`, `ServiceController.Start/Stop/Pause/Continue`, `ManagementObject.InvokeMethod/Put/Delete`, `ManagementClass.CreateInstance`) or user strings naming forbidden WMI classes and methods (`Win32_Product`, `RequestStateChange`, `DefineSystem`, `DestroySystem`, `ModifySystemSettings`, `CreateSnapshot`, `MigrateVirtualSystemToHost`).
+- All Eviewer tests carried over (one known failure after the rename is Task 1 of the plan).
+- Story engine: pure tests with fake events: VM filtering by ID, host events attached to running VMs, sorting and grouping, coverage warning, and **every hint rule both firing and not firing** (missing event, outside window, competing explanation, unverified event).
+- Catalog file: schema test like the troubleshooter rules.
+- Placement: extraction from event data; message-only fallback.
+- VMs screen, story screen: view-model tests with fake inventory and fake events.
+- Safety test, guard tests, French Windows sample log (when available).
 
-## 9. Non-English Windows
+## 9. Left to the builder
 
-As Eviewer §8. The VM state, health and generation come from WMI as numbers and are mapped to English labels; VM names are shown as they are.
+- Layout details of the VMs and story screens, following the Eviewer theme.
+- Finding and confirming the IDs marked *verify* in §6.1 on a real host, and the 1641 log.
+- Event data field names for migration and cluster move events (read from real event XML).
+- Exact HRESULT table content for §7.2.
 
-## 10. Open items for the owner
+## 10. Open questions for the owner
 
-- Review the §5.2 event list on a real Server 2022/2025 host (export samples to `tests/samples/`).
-- Confirm the channel spellings on your hosts (`Get-WinEvent -ListLog *Hyper-V*`), especially `Integration-Admin`.
 - Are 500,000 events and 1 GB the right limits for your hosts?
-- Should the VM list later show live CPU and memory use (performance counters)?
+- Which of the §7 features do you want in Phase 1?
