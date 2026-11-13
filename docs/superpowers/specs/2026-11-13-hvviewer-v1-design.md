@@ -1,7 +1,7 @@
 # Hyper-V Viewer v1 — Design (Phase 1: Hyper-V host)
 
 - **Date:** 2026-11-13 (replaces the first draft of the same date)
-- **Status:** Draft for owner approval
+- **Status:** Approved (owner delegated decisions, 2026-11-13)
 - **Repo:** `dooshun13/Hyper-V-Viewer`. Code base: Eviewer copied and renamed to `HvViewer.*` (already on `main`).
 - **Phase 2 (later plan):** SCVMM. Not part of this document except where noted.
 
@@ -163,7 +163,9 @@ Hint texts are written by us, short and plain, never copied from Microsoft.
 
 From the story's `migrate` and `clustermove` events for the VM: direction (here / away) and the other host's name come from the **event data fields** (not the message text). If the other host's name is not in the event data, the panel shows the event's message and no extracted name.
 
-## 7. Other features (my proposals, in priority order; the owner can cut any)
+## 7. Other features (decided 2026-11-13; the owner delegated the choice)
+
+In Phase 1: 1 host pulse, 2 error-code decoder, 3 checkpoints, 6 copy as PowerShell. Deferred to a later plan: 4 replica health, 5 since your last visit.
 
 1. **Host pulse** on Home: hypervisor running, VMMS running, cluster node state, host free memory, free space on VM storage paths and CSVs, virtual switch NIC links, pending reboot. Each green / amber / red with one line of why. All read-only queries.
 2. **Error-code decoder**: HRESULTs found in messages (e.g. `0x80070005`, `0x8007274C`) get their standard name and meaning from a built-in table, shown in the detail view only.
@@ -188,7 +190,8 @@ From the story's `migrate` and `clustermove` events for the VM: direction (here 
 - Event data field names for migration and cluster move events (read from real event XML).
 - Exact HRESULT table content for §7.2.
 
-## 10. Open questions for the owner
+## 10. Decisions taken for the owner (2026-11-13) and open questions
 
-- Are 500,000 events and 1 GB the right limits for your hosts?
-- Which of the §7 features do you want in Phase 1?
+- Limits kept at 500,000 events and 1 GB (revisit after the release-checklist test on a busy host).
+- §7 scope as above.
+- Open: confirm the *verify* IDs in §6.1 and the 1641 event-data field names on a real host.

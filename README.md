@@ -6,12 +6,19 @@ A read-only event-log viewer for Windows Server **Hyper-V hosts**, built for deb
 
 Open it on a host and within seconds see which VMs are unhealthy, what went wrong in the last 24 hours, and where to look, with plain-English explanations and next steps.
 
-## What it does
+## What it does (Phase 1, planned)
 
-- **Virtual machines:** a read-only list of the host's VMs (state, health, uptime, vCPUs, memory, generation, configuration version). *Show events* opens every Hyper-V event about that VM.
-- **Hyper-V troubleshooters (9):** VM start failures, VM crashes & resets, Live migration, Checkpoints & merges, Hyper-V Replica, Virtual switches, VM storage, Integration services, Hypervisor & host, plus Failover cluster.
-- **Hyper-V logs:** VMMS, Worker, Hypervisor, Compute, VID, VmSwitch, StorageVSP, Integration, High-Availability and more, grouped in a "Hyper-V" folder in the log picker.
-- **Everything from Eviewer:** Home dashboard, Events search (exact text, date and time to the second, IDs, sources, levels, one-line query), event detail with explanations, 11 general Windows troubleshooters, saved views, CSV/HTML export, dark and light themes.
+- **VM story:** pick a VM and see every start, shutdown, turn-off, reset, crash and move over the last 7 days, with Windows' own log messages in one list. Host-level events (host restart or power loss, cluster node loss) appear in each affected VM's story. A short hint is added **only when the cause is certain**.
+- **Where it has been:** the VM's arrivals and departures as seen from this host.
+- **Honest history:** says how far back each log really goes.
+- **VMs screen:** state, health, uptime, vCPUs, memory, generation, version, and each VM's last stop or restart.
+- **Host pulse:** hypervisor, VMMS, cluster node, host memory and VM storage at a glance.
+- **Checkpoints:** old checkpoints and leftover backup (recovery) checkpoints.
+- **Error-code decoder** and **Copy as PowerShell** for every search and story.
+- **Hyper-V troubleshooters and logs:** VM start failures, crashes, live migration, checkpoints, Replica, virtual switches, storage, integration services, hypervisor, failover cluster.
+- **Everything from Eviewer:** Home dashboard, Events search, event detail with explanations, saved views, CSV/HTML export, dark and light themes.
+
+Phase 2 (later): SCVMM job history and VMM logs.
 
 ## Safe on production hosts
 
