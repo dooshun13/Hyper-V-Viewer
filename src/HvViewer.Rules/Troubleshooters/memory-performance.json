@@ -1,0 +1,85 @@
+{
+    "schema":  1,
+    "id":  "memory-performance",
+    "title":  "Memory \u0026 performance",
+    "summary":  "Low memory, slow CPU speed and hardware errors.",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-Resource-Exhaustion-Detector",
+                       "id":  2004,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Windows ran low on virtual memory",
+                       "meaning":  "Windows ran short of memory and listed the programs using the most.",
+                       "causes":  "Too many programs open, a program leaking memory, or a small page file.",
+                       "next":  "Check the programs named in the message, close or update them, and make sure the page file is large enough.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Resource-Exhaustion-Detector%20event%202004"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Processor-Power",
+                       "id":  37,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "The CPU is running slower than its top speed",
+                       "meaning":  "Windows could not run a processor at its full speed because of a limit from the firmware.",
+                       "causes":  "Heat, a power-saving limit in the BIOS or a power-plan setting.",
+                       "next":  "Check temperatures and the power plan, and update the BIOS.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Kernel-Processor-Power%20event%2037"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-WHEA-Logger",
+                       "id":  1,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A corrected hardware error was logged",
+                       "meaning":  "The hardware reported an error that it corrected on its own.",
+                       "causes":  "An early sign of a hardware problem, such as memory, a processor or a bus.",
+                       "next":  "If these repeat, check memory, temperatures and drivers, and update the BIOS.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WHEA-Logger%20event%201"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-WHEA-Logger",
+                       "id":  17,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A corrected PCI Express hardware error was logged",
+                       "meaning":  "A PCI Express device reported an error that was corrected.",
+                       "causes":  "A loose card or cable, or a failing PCI Express device.",
+                       "next":  "If it repeats, reseat the device, update its driver and the BIOS, and check its health.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WHEA-Logger%20event%2017"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-WHEA-Logger",
+                       "id":  18,
+                       "log":  "System",
+                       "severity":  "critical",
+                       "title":  "A fatal hardware error occurred",
+                       "meaning":  "The hardware reported an error that it could not correct, and Windows usually restarts after it.",
+                       "causes":  "Failing hardware such as a processor or memory, overheating or an unstable overclock.",
+                       "next":  "Check temperatures, remove any overclock, and test memory. Contact the maker if it repeats.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WHEA-Logger%20event%2018"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-WHEA-Logger",
+                       "id":  19,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A corrected processor error was logged",
+                       "meaning":  "A processor reported an error that it corrected on its own.",
+                       "causes":  "Heat, an unstable overclock or a processor starting to fail.",
+                       "next":  "If it repeats, check temperatures, remove any overclock and update the BIOS.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WHEA-Logger%20event%2019"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-WHEA-Logger",
+                       "id":  47,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A corrected hardware error needed attention",
+                       "meaning":  "The hardware corrected an error but flagged that it needs attention.",
+                       "causes":  "Failing memory or another component.",
+                       "next":  "If it repeats, run a memory test and check the hardware.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WHEA-Logger%20event%2047"
+                   }
+               ]
+}

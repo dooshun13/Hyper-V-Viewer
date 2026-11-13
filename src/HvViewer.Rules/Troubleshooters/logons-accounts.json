@@ -1,0 +1,118 @@
+{
+    "schema":  1,
+    "id":  "logons-accounts",
+    "title":  "Logons \u0026 accounts",
+    "summary":  "Failed sign-ins, lockouts and account or group changes.",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4625,
+                       "log":  "Security",
+                       "severity":  "warning",
+                       "title":  "An account failed to sign in",
+                       "meaning":  "Someone or something tried to sign in and failed. The message shows the account, the reason and where it came from.",
+                       "causes":  "A wrong password, an old saved password, or an unwanted sign-in attempt.",
+                       "next":  "Check the account and source address. Many failures in a row can mean password guessing.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204625"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4740,
+                       "log":  "Security",
+                       "severity":  "error",
+                       "title":  "A user account was locked out",
+                       "meaning":  "An account was locked after too many wrong passwords.",
+                       "causes":  "A wrong or outdated saved password on a device or service, or guessing attempts.",
+                       "next":  "Find the device named in the message that keeps sending the old password, and fix it.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204740"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4771,
+                       "log":  "Security",
+                       "severity":  "warning",
+                       "title":  "Kerberos sign-in check failed",
+                       "meaning":  "A domain controller refused a Kerberos sign-in request. The message holds a failure code.",
+                       "causes":  "A wrong password, an expired account, or a clock that is out of sync.",
+                       "next":  "Check the failure code in the message, the account status and the time sync.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204771"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4776,
+                       "log":  "Security",
+                       "severity":  "info",
+                       "title":  "The computer checked an account\u0027s password",
+                       "meaning":  "A computer checked the credentials of an account using NTLM. The result tells if it passed.",
+                       "causes":  "Normal sign-ins and network logons.",
+                       "next":  "Look for failures in the result code. Many failures can point to a wrong or guessed password.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204776"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4672,
+                       "log":  "Security",
+                       "severity":  "info",
+                       "title":  "A sign-in was given special privileges",
+                       "meaning":  "An account with powerful rights, such as an administrator, signed in.",
+                       "causes":  "Normal sign-ins by administrators or system accounts.",
+                       "next":  "Only look closer if an account you do not expect has these rights.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204672"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4720,
+                       "log":  "Security",
+                       "severity":  "info",
+                       "title":  "A user account was created",
+                       "meaning":  "A new account was added to the PC or domain. The message names who created it.",
+                       "causes":  "An administrator or a program added an account.",
+                       "next":  "Check that you expected this account and who created it.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204720"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4724,
+                       "log":  "Security",
+                       "severity":  "info",
+                       "title":  "An account password was reset",
+                       "meaning":  "Someone tried to reset another account\u0027s password.",
+                       "causes":  "An administrator reset a forgotten password.",
+                       "next":  "Check that you expected the reset and who did it.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204724"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4728,
+                       "log":  "Security",
+                       "severity":  "info",
+                       "title":  "A member was added to a global security group",
+                       "meaning":  "An account was added to a security group at the domain level.",
+                       "causes":  "An administrator changed group membership.",
+                       "next":  "Check that the change was expected, mainly for powerful groups.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204728"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Security-Auditing",
+                       "id":  4732,
+                       "log":  "Security",
+                       "severity":  "info",
+                       "title":  "A member was added to a local security group",
+                       "meaning":  "An account was added to a group on this PC, such as Administrators.",
+                       "causes":  "An administrator or an installer changed group membership.",
+                       "next":  "Check that the change was expected, mainly for the Administrators group.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Security-Auditing%20event%204732"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Eventlog",
+                       "id":  1102,
+                       "log":  "Security",
+                       "severity":  "critical",
+                       "title":  "The Security audit log was cleared",
+                       "meaning":  "The Security log was erased. The message shows who cleared it.",
+                       "causes":  "An administrator cleaned the log, or someone is covering their tracks.",
+                       "next":  "Check that the clearing was expected and by whom. Treat an unexpected one as a security warning.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Eventlog%20event%201102"
+                   }
+               ]
+}

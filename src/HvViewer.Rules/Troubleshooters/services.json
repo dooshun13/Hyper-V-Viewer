@@ -1,0 +1,129 @@
+{
+    "schema":  1,
+    "id":  "services",
+    "title":  "Services",
+    "summary":  "Services that fail to start, hang or stop unexpectedly.",
+    "events":  [
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7000,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service failed to start",
+                       "meaning":  "Windows could not start a service. The message names the service and the error.",
+                       "causes":  "A wrong account or password for the service, a missing file, or a broken dependency.",
+                       "next":  "Open the service settings and check its account, its path and the services it depends on.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207000"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7001,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service could not start because a dependency failed",
+                       "meaning":  "A service needs another service that did not start.",
+                       "causes":  "The service it depends on is stopped, disabled or failing.",
+                       "next":  "Find the dependency named in the message and fix why it does not start.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207001"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7009,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service took too long to start",
+                       "meaning":  "Windows waited for a service to start and gave up. The message shows how long it waited.",
+                       "causes":  "A slow or busy PC, a stuck service, or a service that is waiting on something.",
+                       "next":  "Try starting the service again, and check for slow disks or network at start-up.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207009"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7011,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service did not answer in time",
+                       "meaning":  "Windows asked a running service for something and it did not reply in time.",
+                       "causes":  "The service is busy or stuck, or the PC is overloaded.",
+                       "next":  "Restart the service and check what is slowing the PC.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207011"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7022,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service hung while starting",
+                       "meaning":  "A service started but then stopped responding before it was ready.",
+                       "causes":  "A bug in the service, a missing resource or a conflict.",
+                       "next":  "Restart the service, and update or repair the software that owns it.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207022"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7023,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service stopped with an error",
+                       "meaning":  "A service ended and reported an error. The message includes the error text.",
+                       "causes":  "A bug or a missing resource.",
+                       "next":  "Read the error text in the message, then update or repair the software that owns the service.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207023"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7024,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service stopped with a service-specific error",
+                       "meaning":  "A service ended with an error code that only the service itself understands.",
+                       "causes":  "A bug or a problem inside the service\u0027s own software.",
+                       "next":  "Search for the service name and the error code, and check the software\u0027s own logs.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207024"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7031,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service crashed and Windows applied a recovery action",
+                       "meaning":  "A service stopped unexpectedly, and Windows ran the recovery action set for it, such as a restart.",
+                       "causes":  "A crash in the service or software it depends on.",
+                       "next":  "Check the Application log at the same time for the crash details.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207031"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7034,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "A service stopped unexpectedly",
+                       "meaning":  "A service ended without being asked to. The message names the service.",
+                       "causes":  "A crash in the service.",
+                       "next":  "Check the Application log at the same time for crash details and update the software.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207034"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7040,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "A service start type was changed",
+                       "meaning":  "The start type of a service was changed, for example from manual to automatic.",
+                       "causes":  "A person, an installer or a tool changed it.",
+                       "next":  "Check the change was expected if the service is important.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207040"
+                   },
+                   {
+                       "provider":  "Service Control Manager",
+                       "id":  7045,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A new service was installed",
+                       "meaning":  "A service was added to the system. The message shows its name and file path.",
+                       "causes":  "A program install or driver install, or possibly unwanted software.",
+                       "next":  "Check you recognise the service name and the file path.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Service%20Control%20Manager%20event%207045"
+                   }
+               ]
+}

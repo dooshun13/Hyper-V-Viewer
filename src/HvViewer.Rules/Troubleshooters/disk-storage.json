@@ -1,0 +1,129 @@
+{
+    "schema":  1,
+    "id":  "disk-storage",
+    "title":  "Disk \u0026 storage",
+    "summary":  "Disk errors, retried reads and writes, file system problems and low space.",
+    "events":  [
+                   {
+                       "provider":  "disk",
+                       "id":  7,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Windows found a bad block on a disk",
+                       "meaning":  "The disk driver reported a bad block while reading or writing a disk.",
+                       "causes":  "A failing disk, a loose or bad cable, or a bad sector.",
+                       "next":  "Back up your data now, then check the disk health with the maker\u0027s tool or SMART data.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=disk%20event%207"
+                   },
+                   {
+                       "provider":  "disk",
+                       "id":  11,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "The disk driver reported a controller error",
+                       "meaning":  "The driver got an error from the disk controller while talking to a disk.",
+                       "causes":  "A bad cable or connection, a failing disk or controller, or a driver problem.",
+                       "next":  "Check the cables and connections, update the storage drivers, and check disk health.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=disk%20event%2011"
+                   },
+                   {
+                       "provider":  "disk",
+                       "id":  51,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A disk error happened while paging memory",
+                       "meaning":  "Windows had an error while moving memory data to or from a disk.",
+                       "causes":  "A failing disk, a bad cable, or a USB or external drive that was disconnected.",
+                       "next":  "Check disk health and connections. If it is an external drive, try another cable or port.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=disk%20event%2051"
+                   },
+                   {
+                       "provider":  "disk",
+                       "id":  153,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A disk read or write had to be retried",
+                       "meaning":  "Windows asked a disk to repeat an operation because the first try failed or took too long.",
+                       "causes":  "An early sign of a failing disk, a weak cable or connection, or a busy storage controller.",
+                       "next":  "Check disk health and cables. If it repeats, back up your data.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=disk%20event%20153"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Ntfs",
+                       "id":  55,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "The file system found damage on a volume",
+                       "meaning":  "NTFS found corruption in the structure of a volume.",
+                       "causes":  "An unclean shutdown, a failing disk or a bad cable.",
+                       "next":  "Back up your data, then run a disk check on the volume and check the disk health.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Ntfs%20event%2055"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Ntfs",
+                       "id":  98,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "NTFS checked a volume and found it healthy",
+                       "meaning":  "Windows ran an online check of a volume and logged that it is healthy.",
+                       "causes":  "Normal housekeeping.",
+                       "next":  "No action needed. A volume that is not healthy is reported by other events such as 55.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Ntfs%20event%2098"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Ntfs",
+                       "id":  140,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "NTFS could not save data to its transaction log",
+                       "meaning":  "The file system could not flush data to its transaction log, so data on the volume may be damaged.",
+                       "causes":  "A failing disk, a lost connection to the drive, or a power problem.",
+                       "next":  "Check the disk and its connection, then run a disk check on the volume.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Ntfs%20event%20140"
+                   },
+                   {
+                       "provider":  "storahci",
+                       "id":  129,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "The SATA storage controller did not respond in time",
+                       "meaning":  "Windows had to reset a storage device because the controller did not answer in time.",
+                       "causes":  "A failing disk, a poor cable or connection, or a driver problem.",
+                       "next":  "Check the disk health and cables, and update the storage driver and firmware.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=storahci%20event%20129"
+                   },
+                   {
+                       "provider":  "stornvme",
+                       "id":  129,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "The NVMe storage controller did not respond in time",
+                       "meaning":  "Windows had to reset an NVMe drive because it did not answer in time.",
+                       "causes":  "A failing drive, a firmware or driver bug, or overheating.",
+                       "next":  "Update the drive firmware and the NVMe driver, and check the drive health and temperature.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=stornvme%20event%20129"
+                   },
+                   {
+                       "provider":  "LSI_SAS",
+                       "id":  129,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "The SAS storage controller did not respond in time",
+                       "meaning":  "Windows had to reset a storage device because the SAS controller did not answer in time.",
+                       "causes":  "A failing disk, a bad cable or backplane, or a driver or firmware problem.",
+                       "next":  "Check the disk and cable health, and update the controller driver and firmware.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=LSI_SAS%20event%20129"
+                   },
+                   {
+                       "provider":  "srv",
+                       "id":  2013,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A disk is almost full",
+                       "meaning":  "A volume is at or close to its capacity, so Windows warns that you may need to free space.",
+                       "causes":  "Large files, downloads, caches or backups filling the disk.",
+                       "next":  "Free up space on the drive named in the message, or move files to another drive.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=srv%20event%202013"
+                   }
+               ]
+}

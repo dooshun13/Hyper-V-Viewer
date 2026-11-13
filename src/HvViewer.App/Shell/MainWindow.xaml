@@ -1,0 +1,139 @@
+<ui:FluentWindow x:Class="HvViewer.App.Shell.MainWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                  xmlns:shell="clr-namespace:HvViewer.App.Shell"
+                  Title="Hyper-V Viewer"
+                  Width="1360" Height="860" MinWidth="980" MinHeight="620"
+                  WindowStartupLocation="CenterScreen"
+                  WindowBackdropType="None"
+                  ExtendsContentIntoTitleBar="True"
+                  Background="{DynamicResource WindowBg}"
+                  FontFamily="{StaticResource FontUi}"
+                  d:DataContext="{d:DesignInstance Type=shell:ShellViewModel}"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  mc:Ignorable="d">
+    <Grid Background="{DynamicResource BgGradient}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="Hyper-V Viewer" />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="76" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Icon bar -->
+            <Border Grid.Column="0" Background="{DynamicResource IconBarBg}">
+                <ItemsControl ItemsSource="{Binding NavItems}" HorizontalAlignment="Center" Margin="0,14,0,0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type shell:NavItem}">
+                            <Button Style="{StaticResource NavButton}"
+                                    Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                    CommandParameter="{Binding Key}"
+                                    ToolTip="{Binding Label}" AutomationProperties.Name="{Binding Label}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Glyph}" FontFamily="{StaticResource FontIcons}" FontSize="20"
+                                               HorizontalAlignment="Center" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                    <TextBlock Text="{Binding Label}" FontSize="10" Margin="0,3,0,0" HorizontalAlignment="Center"
+                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+            <Grid Grid.Column="1" Margin="22,10,22,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Top bar -->
+                <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,14">
+                    <Border Style="{StaticResource Pill}" DockPanel.Dock="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE7F4;" FontFamily="{StaticResource FontIcons}" Foreground="{DynamicResource TextMuted}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding MachineName}" Style="{StaticResource PillText}" FontFamily="{StaticResource FontMono}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Pill}" DockPanel.Dock="Left" Margin="12,0,0,0" MinWidth="320">
+                        <Grid>
+                            <TextBox x:Name="SearchBox"
+                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="Transparent" BorderThickness="0" Padding="0"
+                                     Foreground="{DynamicResource TextPrimary}" CaretBrush="{DynamicResource TextPrimary}"
+                                     VerticalContentAlignment="Center" FontSize="13"
+                                     AutomationProperties.Name="Search events">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Return" Command="{Binding SubmitSearchCommand}" />
+                                </TextBox.InputBindings>
+                            </TextBox>
+                            <TextBlock Text="Search events      Ctrl+K" Foreground="{DynamicResource TextMuted}" FontSize="13"
+                                       IsHitTestVisible="False" VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+
+                    <!-- Right side -->
+                    <Border Style="{StaticResource Pill}" DockPanel.Dock="Right" Padding="4" Margin="12,0,0,0" ToolTip="Colour theme">
+                        <StackPanel Orientation="Horizontal" AutomationProperties.Name="Colour theme">
+                            <RadioButton Content="Night" GroupName="TopTheme" Style="{StaticResource SegmentButton}" IsChecked="{Binding IsThemeNight}" />
+                            <RadioButton Content="Day" GroupName="TopTheme" Style="{StaticResource SegmentButton}" IsChecked="{Binding IsThemeDay}" />
+                            <RadioButton Content="Auto" GroupName="TopTheme" Style="{StaticResource SegmentButton}" IsChecked="{Binding IsThemeAuto}" />
+                        </StackPanel>
+                    </Border>
+                    <Button DockPanel.Dock="Right" Content="Restart as administrator" Command="{Binding RestartAsAdminCommand}" Margin="12,0,0,0" Padding="12,5"
+                            ToolTip="Needed to read the Security log (sign-ins). Windows will ask you to confirm.">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CanRestartAsAdmin}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Border Style="{StaticResource Pill}" DockPanel.Dock="Right" Margin="12,0,0,0">
+                        <TextBlock Text="{Binding AccessBadge}" Style="{StaticResource PillText}" />
+                    </Border>
+                    <Border Style="{StaticResource Pill}" DockPanel.Dock="Right" Margin="12,0,0,0" Background="{DynamicResource OkBadgeBg}">
+                        <TextBlock Text="Read-only" Style="{StaticResource PillText}" Foreground="{DynamicResource OkBadgeText}" />
+                    </Border>
+                </DockPanel>
+
+                <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" Focusable="False" />
+            </Grid>
+        </Grid>
+
+        <!-- Status bar -->
+        <Border Grid.Row="2" Background="{DynamicResource IconBarBg}" Padding="22,6">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Right" Text="{Binding Footprint}" FontFamily="{StaticResource FontMono}" FontSize="11"
+                           Foreground="{DynamicResource TextMuted}" ToolTip="Hyper-V Viewer's own CPU and memory use" />
+                <TextBlock Text="Hyper-V Viewer only reads. It never changes your logs, the registry, services or settings."
+                           FontSize="11" Foreground="{DynamicResource TextMuted}" />
+            </DockPanel>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

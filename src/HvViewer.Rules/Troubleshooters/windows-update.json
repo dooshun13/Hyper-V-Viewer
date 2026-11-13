@@ -1,0 +1,63 @@
+{
+    "schema":  1,
+    "id":  "windows-update",
+    "title":  "Windows Update",
+    "summary":  "Update installs, failures and servicing problems.",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-WindowsUpdateClient",
+                       "id":  19,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "An update was installed",
+                       "meaning":  "Windows Update installed an update successfully. The message names the update.",
+                       "causes":  "Normal update activity.",
+                       "next":  "Use it to see when the last update was installed.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WindowsUpdateClient%20event%2019"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-WindowsUpdateClient",
+                       "id":  20,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "An update failed to install",
+                       "meaning":  "Windows Update could not install an update. The message holds the update name and an error code.",
+                       "causes":  "Not enough disk space, a damaged update cache, or a conflict with other software.",
+                       "next":  "Note the error code and search for it. Free disk space and try the update again.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WindowsUpdateClient%20event%2020"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-WindowsUpdateClient",
+                       "id":  43,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "Windows started installing an update",
+                       "meaning":  "Windows Update began installing an update.",
+                       "causes":  "Normal update activity.",
+                       "next":  "If no install success follows soon after, look for a failure event nearby.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WindowsUpdateClient%20event%2043"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Servicing",
+                       "id":  2,
+                       "log":  "Setup",
+                       "severity":  "info",
+                       "title":  "A Windows component change finished",
+                       "meaning":  "The servicing stack finished changing a package, which is how updates and features are installed.",
+                       "causes":  "Normal update or feature install.",
+                       "next":  "No action needed unless it is followed by failure events.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Servicing%20event%202"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Servicing",
+                       "id":  4,
+                       "log":  "Setup",
+                       "severity":  "warning",
+                       "title":  "Windows servicing reported a problem with a package",
+                       "meaning":  "The servicing stack logged a warning while changing a package.",
+                       "causes":  "A damaged component store, an interrupted update, or a conflict.",
+                       "next":  "If updates fail, run the Windows repair tools such as DISM and SFC, and try again.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Servicing%20event%204"
+                   }
+               ]
+}

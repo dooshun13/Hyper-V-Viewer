@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>HvViewer.App</RootNamespace>
+    <AssemblyName>HvViewer</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="System.IO" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WPF-UI" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HvViewer.Core\HvViewer.Core.csproj" />
+    <ProjectReference Include="..\HvViewer.System\HvViewer.System.csproj" />
+    <ProjectReference Include="..\HvViewer.Rules\HvViewer.Rules.csproj" />
+  </ItemGroup>
+</Project>

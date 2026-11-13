@@ -1,0 +1,74 @@
+{
+    "schema":  1,
+    "id":  "rdp",
+    "title":  "RDP / Remote Desktop",
+    "summary":  "Remote Desktop sign-ins, disconnects and reconnects.",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-TerminalServices-LocalSessionManager",
+                       "id":  21,
+                       "log":  "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+                       "severity":  "info",
+                       "title":  "A Remote Desktop session signed in",
+                       "meaning":  "A user signed in over Remote Desktop. The message shows the user and the source address.",
+                       "causes":  "Normal remote use.",
+                       "next":  "Check the user and address if you did not expect a remote sign-in.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-TerminalServices-LocalSessionManager%20event%2021"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-TerminalServices-LocalSessionManager",
+                       "id":  23,
+                       "log":  "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+                       "severity":  "info",
+                       "title":  "A Remote Desktop session signed out",
+                       "meaning":  "A user signed out of a Remote Desktop session.",
+                       "causes":  "Normal remote use.",
+                       "next":  "Use it with event 21 to see how long a session lasted.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-TerminalServices-LocalSessionManager%20event%2023"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-TerminalServices-LocalSessionManager",
+                       "id":  24,
+                       "log":  "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+                       "severity":  "info",
+                       "title":  "A Remote Desktop session disconnected",
+                       "meaning":  "A user\u0027s Remote Desktop session was disconnected but not signed out.",
+                       "causes":  "The user closed the window, or the connection dropped.",
+                       "next":  "If drops are unexpected, check the network between the two PCs.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-TerminalServices-LocalSessionManager%20event%2024"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-TerminalServices-LocalSessionManager",
+                       "id":  25,
+                       "log":  "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+                       "severity":  "info",
+                       "title":  "A Remote Desktop session reconnected",
+                       "meaning":  "A user reconnected to an existing Remote Desktop session.",
+                       "causes":  "Normal remote use after a disconnect.",
+                       "next":  "Use it with event 24 to see how often a connection drops.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-TerminalServices-LocalSessionManager%20event%2025"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-TerminalServices-LocalSessionManager",
+                       "id":  40,
+                       "log":  "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+                       "severity":  "info",
+                       "title":  "A Remote Desktop session disconnected with a reason code",
+                       "meaning":  "Windows recorded why a session was disconnected, as a reason code.",
+                       "causes":  "A network drop, an idle limit, an admin action or a user action.",
+                       "next":  "Look up the reason code in the message to see why the session ended.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-TerminalServices-LocalSessionManager%20event%2040"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-TerminalServices-RemoteConnectionManager",
+                       "id":  1149,
+                       "log":  "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational",
+                       "severity":  "info",
+                       "title":  "A Remote Desktop user was authenticated",
+                       "meaning":  "A user passed the network check for a Remote Desktop connection, before the sign-in finished.",
+                       "causes":  "A normal connection attempt, or someone probing the PC.",
+                       "next":  "Check the user and source address. Many from unknown addresses can mean an attack.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-TerminalServices-RemoteConnectionManager%20event%201149"
+                   }
+               ]
+}

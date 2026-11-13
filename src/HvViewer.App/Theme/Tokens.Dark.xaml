@@ -1,0 +1,37 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Night theme: the Xdisk "Night" palette (github.com/dooshun13/Xdisk, Theme/Night.xaml) mapped to HvViewer's roles.
+         Tokens.Light.xaml (Day) must define exactly the same keys. -->
+    <SolidColorBrush x:Key="WindowBg" Color="#07090F" />
+    <LinearGradientBrush x:Key="BgGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#0A0E1A" Offset="0" />
+        <GradientStop Color="#07090F" Offset="0.5" />
+        <GradientStop Color="#12081A" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="IconBarBg" Color="#0F1320" />
+    <SolidColorBrush x:Key="CardBg" Color="#0F1320" />
+    <SolidColorBrush x:Key="CardBorder" Color="#232B45" />
+    <SolidColorBrush x:Key="TileBg" Color="#151B2D" />
+
+    <SolidColorBrush x:Key="TextPrimary" Color="#E8ECF8" />
+    <SolidColorBrush x:Key="TextSecondary" Color="#B8C0DA" />
+    <SolidColorBrush x:Key="TextMuted" Color="#8A93B2" />
+    <SolidColorBrush x:Key="OnAccent" Color="#07090F" />
+
+    <!-- Cyan is the accent. Severity: Critical = magenta, Error = red, Warning = amber, Information = blue, OK = lime. -->
+    <SolidColorBrush x:Key="Accent" Color="#00E5FF" />
+    <SolidColorBrush x:Key="AccentSelectedBg" Color="#2600E5FF" />
+    <SolidColorBrush x:Key="Critical" Color="#FF2E88" />
+    <SolidColorBrush x:Key="Error" Color="#FF4D5E" />
+    <SolidColorBrush x:Key="Warning" Color="#FFB020" />
+    <SolidColorBrush x:Key="Info" Color="#4D8BFF" />
+    <SolidColorBrush x:Key="Ok" Color="#39FF88" />
+    <SolidColorBrush x:Key="OkBadgeBg" Color="#2639FF88" />
+    <SolidColorBrush x:Key="OkBadgeText" Color="#39FF88" />
+
+    <LinearGradientBrush x:Key="NeonGradient" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#00E5FF" Offset="0" />
+        <GradientStop Color="#FF2E88" Offset="1" />
+    </LinearGradientBrush>
+    <DropShadowEffect x:Key="AccentGlow" Color="#00E5FF" ShadowDepth="0" BlurRadius="18" Opacity="0.75" />
+</ResourceDictionary>

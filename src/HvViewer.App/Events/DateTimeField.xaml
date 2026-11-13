@@ -1,0 +1,36 @@
+<UserControl x:Class="HvViewer.App.Events.DateTimeField"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <DockPanel>
+            <Button DockPanel.Dock="Right" Click="OnToggle" Padding="8,6" Margin="4,0,0,0" ToolTip="Pick a date and time" AutomationProperties.Name="Pick date and time">
+                <TextBlock Text="&#xE787;" FontFamily="{StaticResource FontIcons}" FontSize="13" />
+            </Button>
+            <TextBox x:Name="Box" FontFamily="{StaticResource FontMono}" FontSize="12" MinWidth="160"
+                     Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
+                     PreviewMouseLeftButtonUp="OnBoxClicked" />
+        </DockPanel>
+
+        <Popup x:Name="Pop" PlacementTarget="{Binding ElementName=Box}" Placement="Bottom" StaysOpen="False"
+               AllowsTransparency="True" PopupAnimation="None" Opened="OnOpened">
+            <Border Background="{DynamicResource CardBg}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="14"
+                    Padding="12" Margin="0,4,0,0">
+                <StackPanel>
+                    <Calendar x:Name="Cal" SelectedDatesChanged="OnPicked" Background="Transparent" BorderThickness="0" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
+                        <TextBlock Text="Time" FontSize="12" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                        <ComboBox x:Name="Hour" Width="76" MaxDropDownHeight="220" SelectionChanged="OnPicked" AutomationProperties.Name="Hour" />
+                        <TextBlock Text=":" VerticalAlignment="Center" Margin="4,0" />
+                        <ComboBox x:Name="Minute" Width="76" MaxDropDownHeight="220" SelectionChanged="OnPicked" AutomationProperties.Name="Minute" />
+                        <TextBlock Text=":" VerticalAlignment="Center" Margin="4,0" />
+                        <ComboBox x:Name="Second" Width="76" MaxDropDownHeight="220" SelectionChanged="OnPicked" AutomationProperties.Name="Second" />
+                    </StackPanel>
+                    <DockPanel Margin="0,10,0,0" >
+                        <Button DockPanel.Dock="Right" Content="OK" Click="OnOk" Padding="18,6" />
+                        <Button Content="Today" Click="OnToday" Padding="14,6" ToolTip="Today, at the time shown" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

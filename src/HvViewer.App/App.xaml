@@ -1,0 +1,45 @@
+<Application x:Class="HvViewer.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:shell="clr-namespace:HvViewer.App.Shell"
+             xmlns:home="clr-namespace:HvViewer.App.Home"
+             xmlns:events="clr-namespace:HvViewer.App.Events"
+             xmlns:detail="clr-namespace:HvViewer.App.Detail"
+             xmlns:saved="clr-namespace:HvViewer.App.Saved"
+             xmlns:settings="clr-namespace:HvViewer.App.SettingsScreen"
+             ShutdownMode="OnMainWindowClose">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Dark" />
+                <ui:ControlsDictionary />
+                <ResourceDictionary Source="Theme/Tokens.Dark.xaml" />
+                <ResourceDictionary Source="Theme/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Screens: each view model is shown with its view. Views are added as they are built. -->
+            <DataTemplate DataType="{x:Type home:HomeViewModel}">
+                <home:HomeView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type events:EventsViewModel}">
+                <events:EventsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type detail:DetailViewModel}">
+                <detail:DetailView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type saved:SavedViewsViewModel}">
+                <saved:SavedViewsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type settings:SettingsViewModel}">
+                <settings:SettingsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type shell:PlaceholderViewModel}">
+                <StackPanel Margin="4,10">
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource PageTitle}" />
+                    <TextBlock Text="This screen is not built yet." Style="{StaticResource BodyText}" Margin="0,8,0,0" />
+                </StackPanel>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

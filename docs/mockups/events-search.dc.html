@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HvViewer – Events search</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#111214}
+a{color:#7DC0FF}a:hover{color:#B3DAFF}
+input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-calendar-picker-indicator{filter:invert(0.8)}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 1180px; box-sizing: border-box; background: #111214; color: #ECECEE; font-family: Inter, 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif; font-size: 14px; display: flex; flex-wrap: wrap">
+
+  <!-- Icon rail -->
+  <nav aria-label="Main" style="flex: 0 0 76px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 0; background: #16171A; border-right: 1px solid rgba(255,255,255,0.06)">
+    <div style="width: 40px; height: 40px; border-radius: 12px; background: #5AB0FF; display: flex; align-items: center; justify-content: center; margin-bottom: 14px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B1D2E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+    </div>
+    <a href="Main.dc.html" style="width: 60px; min-height: 56px; border-radius: 14px; color: #A9ABB2; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg>Home</a>
+    <a href="Timeline.dc.html" aria-current="page" style="width: 60px; min-height: 56px; border-radius: 14px; background: #24303D; color: #ECECEE; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 600">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5AB0FF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Events</a>
+    <a href="Timeline.dc.html" style="width: 60px; min-height: 56px; border-radius: 14px; color: #A9ABB2; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>Packs</a>
+    <a href="Compare.dc.html" style="width: 60px; min-height: 56px; border-radius: 14px; color: #A9ABB2; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="16" rx="2"/></svg>Compare</a>
+    <a href="Timeline.dc.html" style="width: 60px; min-height: 56px; border-radius: 14px; color: #A9ABB2; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Saved</a>
+    <div style="flex: 1"></div>
+    <a href="#" style="width: 60px; min-height: 56px; border-radius: 14px; color: #A9ABB2; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>Settings</a>
+  </nav>
+
+  <div style="flex: 999 1 600px; min-width: 0; display: flex; flex-direction: column">
+
+    <!-- Command bar -->
+    <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 28px; border-bottom: 1px solid rgba(255,255,255,0.06)">
+      <h1 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em">Events</h1>
+      <button type="button" style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 14px 0 6px; background: #1C1D21; border: 1px solid rgba(255,255,255,0.08); border-radius: 999px; color: #ECECEE; font: inherit; cursor: pointer">
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #1E3326; display: flex; align-items: center; justify-content: center"><span style="width: 8px; height: 8px; border-radius: 50%; background: #4FD1A5"></span></span>
+        <span style="font-weight: 600">SRV-APP01</span><span style="color: #A9ABB2">this computer</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A9ABB2" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div style="flex: 1"></div>
+      <span style="font-size: 12px; color: #A9ABB2">Saved views</span>
+      <sc-for list="{{views}}" as="v" hint-placeholder-count="4">
+        <button type="button" style="min-height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid {{v.border}}; background: {{v.bg}}; color: {{v.fg}}; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer">{{v.name}}</button>
+      </sc-for>
+      <span style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 999px; background: #17271F; color: #7EE2B0; font-size: 12px; font-weight: 600">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>Read-only</span>
+    </header>
+
+    <div style="flex: 1; display: flex; flex-wrap: wrap; gap: 20px; padding: 24px 28px">
+
+      <!-- Search + results -->
+      <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+        <!-- Search panel -->
+        <section aria-label="Search" style="background: #1A1B1F; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+
+          <!-- Text -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <label for="q" style="font-size: 12px; font-weight: 600; color: #A9ABB2">Find text</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+              <div style="flex: 1 1 280px; display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 14px; background: #111214; border: 1px solid #3B5672; border-radius: 14px">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7DC0FF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input id="q" type="text" value="Disk 3" style="flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #ECECEE; font: inherit; font-size: 16px">
+                <button type="button" aria-label="Clear text" style="width: 28px; height: 28px; border: 0; border-radius: 8px; background: #23252A; color: #A9ABB2; cursor: pointer; display: flex; align-items: center; justify-content: center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                </button>
+              </div>
+              <div role="group" aria-label="Text options" style="display: flex; gap: 6px">
+                <button type="button" aria-pressed="false" title="Match case" style="min-width: 44px; min-height: 40px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #C9CBD1; font-family: 'JetBrains Mono', monospace; font-size: 13px; cursor: pointer">Aa</button>
+                <button type="button" aria-pressed="true" title="Whole word" style="min-width: 44px; min-height: 40px; border-radius: 10px; border: 1px solid #5AB0FF; background: #22303F; color: #B3DAFF; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; cursor: pointer">ab|</button>
+                <button type="button" aria-pressed="false" title="Regular expression" style="min-width: 44px; min-height: 40px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #C9CBD1; font-family: 'JetBrains Mono', monospace; font-size: 13px; cursor: pointer">.*</button>
+              </div>
+              <div role="group" aria-label="Search in" style="display: flex; background: #111214; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 3px">
+                <button type="button" style="min-height: 34px; padding: 0 12px; border: 0; border-radius: 9px; background: #2A2D33; color: #ECECEE; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Message</button>
+                <button type="button" style="min-height: 34px; padding: 0 12px; border: 0; border-radius: 9px; background: transparent; color: #A9ABB2; font: inherit; font-size: 13px; cursor: pointer">All fields</button>
+                <button type="button" style="min-height: 34px; padding: 0 12px; border: 0; border-radius: 9px; background: transparent; color: #A9ABB2; font: inherit; font-size: 13px; cursor: pointer">Raw XML</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Time range -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 12px; font-weight: 600; color: #A9ABB2">Date &amp; time</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <sc-for list="{{presets}}" as="p" hint-placeholder-count="7">
+                <button type="button" style="min-height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid {{p.border}}; background: {{p.bg}}; color: {{p.fg}}; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer">{{p.label}}</button>
+              </sc-for>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 12px; color: #A9ABB2">From</span>
+                <div style="display: flex; gap: 6px">
+                  <input type="date" aria-label="From date" value="2026-11-10" style="min-height: 42px; padding: 0 12px; background: #111214; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #ECECEE; font: inherit; color-scheme: dark">
+                  <input type="time" aria-label="From time" step="1" value="22:00:00" style="min-height: 42px; padding: 0 12px; background: #111214; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #ECECEE; font: inherit; color-scheme: dark">
+                </div>
+              </div>
+              <svg width="20" height="42" viewBox="0 0 20 42" fill="none" stroke="#6E7178" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 21h14M12 16l5 5-5 5"/></svg>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 12px; color: #A9ABB2">To</span>
+                <div style="display: flex; gap: 6px">
+                  <input type="date" aria-label="To date" value="2026-11-11" style="min-height: 42px; padding: 0 12px; background: #111214; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #ECECEE; font: inherit; color-scheme: dark">
+                  <input type="time" aria-label="To time" step="1" value="04:00:00" style="min-height: 42px; padding: 0 12px; background: #111214; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #ECECEE; font: inherit; color-scheme: dark">
+                </div>
+              </div>
+              <span style="font-size: 12px; color: #9A9CA3; padding-bottom: 12px">Server local time (UTC+04:00) · 6 h window</span>
+            </div>
+          </div>
+
+          <!-- More filters -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #A9ABB2">Event IDs
+              <input type="text" value="153, -7036" style="min-height: 40px; padding: 0 12px; background: #111214; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #ECECEE; font-family: 'JetBrains Mono', monospace; font-size: 13px">
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #A9ABB2">Source
+              <input type="text" placeholder="any" style="min-height: 40px; padding: 0 12px; background: #111214; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #ECECEE; font: inherit">
+            </label>
+            <div style="position: relative; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #A9ABB2">
+              <span id="logcat-label">Log category</span>
+              <button type="button" aria-labelledby="logcat-label" aria-expanded="true" style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 12px; background: #111214; border: 1px solid #5AB0FF; border-radius: 12px; color: #ECECEE; font: inherit; font-size: 14px; text-align: left; cursor: pointer">
+                <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">System + 4 more</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A9ABB2" stroke-width="2" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+              </button>
+
+              <!-- Open dropdown -->
+              <div role="listbox" aria-label="Log categories" aria-multiselectable="true" style="position: absolute; top: 76px; left: 0; z-index: 10; width: 380px; max-height: 560px; overflow-y: auto; background: #202227; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,0.55); padding: 10px; display: flex; flex-direction: column; gap: 2px; color: #ECECEE; font-size: 13px">
+                <label style="display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 10px; margin-bottom: 6px; background: #16171A; border-radius: 10px; color: #A9ABB2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                  <input type="text" aria-label="Filter logs" placeholder="Filter 412 logs…" style="flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #ECECEE; font: inherit">
+                </label>
+                <sc-for list="{{cats}}" as="g" hint-placeholder-count="3">
+                  <div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px">
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px 4px">
+                      <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9A9CA3">{{g.name}}</span>
+                      <span style="font-size: 11px; color: #8E9097">{{g.note}}</span>
+                    </div>
+                    <sc-for list="{{g.items}}" as="i" hint-placeholder-count="4">
+                      <label style="display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 0 10px 0 {{i.indent}}px; border-radius: 8px; background: {{i.bg}}">
+                        <input type="checkbox" checked="{{i.on}}" style="accent-color: #5AB0FF; width: 15px; height: 15px">
+                        <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: {{i.fg}}">{{i.name}}</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8E9097">{{i.count}}</span>
+                      </label>
+                    </sc-for>
+                  </div>
+                </sc-for>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.08)">
+                  <label style="display: flex; align-items: center; gap: 8px; color: #C9CBD1"><input type="checkbox" style="accent-color: #5AB0FF; width: 15px; height: 15px">Show Analytic &amp; Debug logs</label>
+                  <button type="button" style="min-height: 32px; padding: 0 14px; border: 0; border-radius: 10px; background: #5AB0FF; color: #0B1D2E; font: inherit; font-weight: 700; cursor: pointer">Apply</button>
+                </div>
+              </div>
+            </div>
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #A9ABB2">Task category
+              <select style="min-height: 40px; padding: 0 10px; background: #111214; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #ECECEE; font: inherit">
+                <option>Any</option>
+              </select>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #A9ABB2">Level
+              <select style="min-height: 40px; padding: 0 10px; background: #111214; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: #ECECEE; font: inherit">
+                <option>Warning and above</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06)">
+            <code style="flex: 1 1 320px; min-width: 0; padding-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #9FB4C8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">"Disk 3" word  from:2026-11-10 22:00:00  to:2026-11-11 04:00:00  id:153,-7036  level:&gt;=warning</code>
+            <div style="display: flex; gap: 8px; padding-top: 12px">
+              <button type="button" style="min-height: 40px; padding: 0 16px; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; background: transparent; color: #ECECEE; font: inherit; cursor: pointer">Save as view</button>
+              <button type="button" style="min-height: 40px; padding: 0 18px; border: 0; border-radius: 12px; background: #5AB0FF; color: #0B1D2E; font: inherit; font-weight: 700; cursor: pointer">Search</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Results -->
+        <section aria-label="Results" style="background: #1A1B1F; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; overflow: hidden">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 20px 10px">
+            <span style="font-weight: 600">13 matches <span style="font-weight: 400; color: #A9ABB2">· 10 Nov 22:00 → 11 Nov 04:00 · 3 groups</span></span>
+            <button type="button" style="min-height: 32px; padding: 0 12px; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; background: transparent; color: #C9CBD1; font: inherit; font-size: 12px; cursor: pointer">Export CSV / HTML</button>
+          </div>
+          <div style="display: flex; align-items: flex-end; gap: 3px; height: 40px; padding: 0 20px 12px">
+            <sc-for list="{{hist}}" as="h" hint-placeholder-count="36">
+              <div style="flex: 1; height: {{h.v}}px; border-radius: 3px; background: {{h.c}}"></div>
+            </sc-for>
+          </div>
+          <div role="table" aria-label="Matching events">
+            <div role="row" style="display: grid; grid-template-columns: 96px 88px 56px minmax(0, 120px) minmax(0, 1fr) 44px; gap: 12px; padding: 10px 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #9A9CA3; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06)">
+              <span role="columnheader">Date / time</span><span role="columnheader">Level</span><span role="columnheader">ID</span><span role="columnheader">Source</span><span role="columnheader">Message</span><span role="columnheader">#</span>
+            </div>
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+              <div role="row" style="display: grid; grid-template-columns: 96px 88px 56px minmax(0, 120px) minmax(0, 1fr) 44px; gap: 12px; align-items: center; min-height: 48px; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.04); background: {{r.bg}}; box-shadow: {{r.ring}}">
+                <span role="cell" style="display: flex; flex-direction: column; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.3"><span style="color: #ECECEE">{{r.time}}</span><span style="color: #9A9CA3">{{r.date}}</span></span>
+                <span role="cell" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: {{r.lc}}"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{r.lc}}"></span>{{r.level}}</span>
+                <span role="cell" style="font-family: 'JetBrains Mono', monospace; font-size: 12px">{{r.id}}</span>
+                <span role="cell" style="font-size: 13px; color: #C9CBD1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{r.src}}</span>
+                <span role="cell" style="font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{r.pre}}<mark style="background: #5A4A12; color: #FFE58A; border-radius: 4px; padding: 1px 3px">{{r.hit}}</mark>{{r.post}}</span>
+                <span role="cell" style="font-size: 12px; color: #A9ABB2; font-family: 'JetBrains Mono', monospace">{{r.count}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+
+      <!-- Detail -->
+      <aside aria-label="Event detail" style="flex: 1 1 340px; max-width: 400px; align-self: flex-start; background: #1A1B1F; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+            <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #332B12; color: #F2C94C">Warning</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #C9CBD1">ID 153 · SRV-APP01</span>
+          </div>
+          <h2 style="margin: 0; font-size: 19px; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em">Disk 3 had to retry a read/write</h2>
+          <span style="font-size: 13px; color: #A9ABB2; font-family: 'JetBrains Mono', monospace">10 Nov 2026 · 23:41:10 · System › disk</span>
+        </div>
+
+        <div role="tablist" aria-label="Detail view" style="display: flex; background: #111214; border-radius: 12px; padding: 3px">
+          <button type="button" role="tab" aria-selected="true" style="flex: 1; min-height: 34px; border: 0; border-radius: 9px; background: #2A2D33; color: #ECECEE; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Explained</button>
+          <button type="button" role="tab" aria-selected="false" style="flex: 1; min-height: 34px; border: 0; border-radius: 9px; background: transparent; color: #A9ABB2; font: inherit; font-size: 13px; cursor: pointer">Message</button>
+          <button type="button" role="tab" aria-selected="false" style="flex: 1; min-height: 34px; border: 0; border-radius: 9px; background: transparent; color: #A9ABB2; font: inherit; font-size: 13px; cursor: pointer">XML</button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px; line-height: 1.55">
+          <div><div style="font-weight: 600; margin-bottom: 4px">What it means</div><div style="color: #C9CBD1">Windows sent a request to Disk 3 that did not complete in time, so it tried again. One retry is harmless; many in a short time point to a storage path problem.</div></div>
+          <div><div style="font-weight: 600; margin-bottom: 4px">Common causes</div><div style="color: #C9CBD1">Failing or overloaded disk · storage controller or driver problem · on a VM, a slow datastore on the host.</div></div>
+          <div style="padding: 14px; border-radius: 14px; background: #1A2633; border: 1px solid #2B4058"><div style="font-weight: 600; margin-bottom: 4px; color: #B3DAFF">Look next</div><div style="color: #D6E6F5">13 retries in 5 minutes, then the server restarted unexpectedly at 23:52 with a blue screen. Check Disk 3 health and the storage driver, then open the memory dump.</div></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 600">Around this event</h3>
+            <span style="font-size: 12px; color: #A9ABB2">± 60 s · all logs</span>
+          </div>
+          <sc-for list="{{related}}" as="x" hint-placeholder-count="4">
+            <div style="display: grid; grid-template-columns: 62px 10px minmax(0, 1fr); gap: 8px; align-items: center; min-height: 30px; font-size: 12px">
+              <span style="font-family: 'JetBrains Mono', monospace; color: #A9ABB2">{{x.t}}</span>
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: {{x.c}}"></span>
+              <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #C9CBD1">{{x.m}}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <button type="button" style="min-height: 42px; border: 0; border-radius: 12px; background: #ECECEE; color: #111214; font: inherit; font-weight: 700; cursor: pointer">Copy for ticket</button>
+      </aside>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const err = '#FF9446', warn = '#F2C94C', crit = '#FF5D6C', info = '#6CB6FF';
+    const on = { border: '#5AB0FF', bg: '#22303F', fg: '#B3DAFF' };
+    const off = { border: 'rgba(255,255,255,0.1)', bg: 'transparent', fg: '#C9CBD1' };
+    const hv = [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    hv[10] = 30; hv[11] = 10;
+    const it = (name, count, on, indent, dim) => ({ name, count, on, indent: indent || 10, bg: on ? '#26303C' : 'transparent', fg: dim ? '#A9ABB2' : '#ECECEE' });
+    return {
+      cats: [
+        { name: 'Windows Logs', note: '5 logs', items: [
+          it('Application', '4,118', true), it('Security', '2,073', false), it('Setup', '12', false), it('System', '9,402', true), it('Forwarded Events', '0', false)
+        ] },
+        { name: 'Applications and Services Logs', note: '407 logs', items: [
+          it('Hardware Events', '0', false),
+          it('Microsoft › Windows', '', false, 10, true),
+          it('GroupPolicy › Operational', '612', true, 30),
+          it('TaskScheduler › Operational', '1,288', false, 30),
+          it('WindowsUpdateClient › Operational', '96', true, 30),
+          it('Ntfs › Operational', '41', true, 30),
+          it('SMBClient › Connectivity', '16', false, 30),
+          it('TerminalServices-LocalSessionManager › Operational', '84', false, 30)
+        ] },
+        { name: 'By troubleshooter', note: 'one click, all logs', items: [
+          it('Boot & shutdown · 4 logs', '', false), it('Disk & storage · 6 logs', '', false), it('Network & DNS · 5 logs', '', false)
+        ] }
+      ],
+      views: [
+        { name: '★ Crashes & restarts', ...off },
+        { name: 'Boot & shutdown', ...off },
+        { name: 'Failed logons', ...off }
+      ],
+      presets: [
+        { label: 'Last 15 min', ...off },
+        { label: 'Last hour', ...off },
+        { label: 'Last 24 h', ...off },
+        { label: 'Today', ...off },
+        { label: 'Yesterday', ...off },
+        { label: 'Since last boot', ...off },
+        { label: 'Custom range', ...on }
+      ],
+      hist: hv.map((v) => ({ v: v ? Math.max(6, v) : 3, c: v ? '#F2C94C' : '#2A2D33' })),
+      rows: [
+        { time: '23:41:10', date: '10 Nov', level: 'Warning', lc: warn, id: '153', src: 'disk', pre: 'The IO operation at logical block address 0x2f1a for ', hit: 'Disk 3', post: ' (PDO name …) was retried.', count: '×9', bg: '#1E2833', ring: 'inset 3px 0 0 #5AB0FF' },
+        { time: '23:44:58', date: '10 Nov', level: 'Warning', lc: warn, id: '153', src: 'disk', pre: 'The IO operation at logical block address 0x9c04 for ', hit: 'Disk 3', post: ' was retried.', count: '×3', bg: 'transparent', ring: 'none' },
+        { time: '23:46:12', date: '10 Nov', level: 'Warning', lc: warn, id: '153', src: 'disk', pre: 'The IO operation at logical block address 0x0410 for ', hit: 'Disk 3', post: ' was retried.', count: '×1', bg: 'transparent', ring: 'none' }
+      ],
+      related: [
+        { t: '23:41:10', c: warn, m: 'disk 153 · selected event' },
+        { t: '23:41:12', c: warn, m: 'Ntfs 140 · failed to flush data to Disk 3' },
+        { t: '23:41:40', c: info, m: 'Service Control Manager 7036 · Windows Search stopped' },
+        { t: '23:42:05', c: warn, m: 'disk 153 · Disk 3 retried again' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

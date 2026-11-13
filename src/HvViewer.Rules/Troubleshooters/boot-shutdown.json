@@ -1,0 +1,118 @@
+{
+    "schema":  1,
+    "id":  "boot-shutdown",
+    "title":  "Boot \u0026 shutdown",
+    "summary":  "Unexpected restarts, blue screens, shutdowns and slow start-ups.",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-Power",
+                       "id":  41,
+                       "log":  "System",
+                       "severity":  "critical",
+                       "title":  "System rebooted without shutting down cleanly",
+                       "meaning":  "Windows restarted without a normal shutdown, for example after a crash, a power cut or a forced power-off.",
+                       "causes":  "Power loss, overheating, a driver or hardware fault, or holding the power button.",
+                       "next":  "Look for a blue screen record (event 1001) just after this one, then read the events logged in the minutes before the restart.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Kernel-Power%20event%2041"
+                   },
+                   {
+                       "provider":  "EventLog",
+                       "id":  6008,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "The previous shutdown was unexpected",
+                       "meaning":  "Windows noted at start-up that the last shutdown did not finish properly.",
+                       "causes":  "The same causes as an unexpected restart: a crash, a power problem or a forced power-off.",
+                       "next":  "Check what was logged just before the restart, and check power and temperatures.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=EventLog%20event%206008"
+                   },
+                   {
+                       "provider":  "EventLog",
+                       "id":  6005,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "The Event Log service started (Windows booted)",
+                       "meaning":  "The Event Log service starts early in every boot, so this event marks when Windows came up.",
+                       "causes":  "Normal start-up.",
+                       "next":  "Use it as a marker: events just before it belong to the previous session.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=EventLog%20event%206005"
+                   },
+                   {
+                       "provider":  "EventLog",
+                       "id":  6006,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "The Event Log service stopped (clean shutdown)",
+                       "meaning":  "The Event Log service stops late in a normal shutdown, so this event marks a clean shutdown.",
+                       "causes":  "Normal shutdown or restart.",
+                       "next":  "If a restart has no matching 6006 before it, the shutdown was probably not clean.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=EventLog%20event%206006"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-WER-SystemErrorReporting",
+                       "id":  1001,
+                       "log":  "System",
+                       "severity":  "critical",
+                       "title":  "Windows restarted after a blue screen",
+                       "meaning":  "Windows hit a fatal error, showed a blue screen and restarted. The message holds the stop code.",
+                       "causes":  "A faulty driver, bad memory or disk, overheating, or a damaged system file.",
+                       "next":  "Note the stop code in the message and search for it. Update or roll back recent drivers and check memory and disk health.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-WER-SystemErrorReporting%20event%201001"
+                   },
+                   {
+                       "provider":  "User32",
+                       "id":  1074,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "A restart or shutdown was requested",
+                       "meaning":  "A program or a user asked Windows to restart or shut down. The message names the process, the reason and the user.",
+                       "causes":  "An update restart, a manual restart or a program that restarts the PC.",
+                       "next":  "Read the message to see who asked and why.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=User32%20event%201074"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-General",
+                       "id":  12,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "Windows started",
+                       "meaning":  "The operating system started. The message shows the Windows build.",
+                       "causes":  "Normal start-up.",
+                       "next":  "Use it as a boot marker.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Kernel-General%20event%2012"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Kernel-General",
+                       "id":  13,
+                       "log":  "System",
+                       "severity":  "info",
+                       "title":  "Windows is shutting down",
+                       "meaning":  "The operating system began shutting down.",
+                       "causes":  "Normal shutdown or restart.",
+                       "next":  "Use it as a shutdown marker.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Kernel-General%20event%2013"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Diagnostics-Performance",
+                       "id":  100,
+                       "log":  "Microsoft-Windows-Diagnostics-Performance/Operational",
+                       "severity":  "warning",
+                       "title":  "Windows took longer than normal to start",
+                       "meaning":  "Start-up was slower than the baseline Windows measures. The message shows the boot time and what slowed it down.",
+                       "causes":  "Too many start-up programs, a slow disk, or a driver or service that starts slowly.",
+                       "next":  "Open the event details to see which apps, drivers or services took longest, and disable or update them.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Diagnostics-Performance%20event%20100"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Diagnostics-Performance",
+                       "id":  200,
+                       "log":  "Microsoft-Windows-Diagnostics-Performance/Operational",
+                       "severity":  "warning",
+                       "title":  "Windows took longer than normal to shut down",
+                       "meaning":  "Shutdown was slower than the baseline Windows measures. The message names what delayed it.",
+                       "causes":  "A program or service that does not close quickly, or a slow disk.",
+                       "next":  "Open the event details to see which program or service delayed shutdown, then update or remove it.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Diagnostics-Performance%20event%20200"
+                   }
+               ]
+}

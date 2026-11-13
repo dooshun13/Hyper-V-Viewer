@@ -1,0 +1,30 @@
+{
+    "schema":  1,
+    "id":  "printing",
+    "title":  "Printing",
+    "summary":  "Print jobs that fail and spooler problems.",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-PrintService",
+                       "id":  372,
+                       "log":  "Microsoft-Windows-PrintService/Admin",
+                       "severity":  "error",
+                       "title":  "A document failed to print",
+                       "meaning":  "A print job failed on a printer. The message names the document, the user and the printer.",
+                       "causes":  "A printer that is offline, a driver problem or a damaged job.",
+                       "next":  "Clear the print queue, restart the print spooler and print again. Update the printer driver if it repeats.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-PrintService%20event%20372"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-PrintService",
+                       "id":  808,
+                       "log":  "Microsoft-Windows-PrintService/Admin",
+                       "severity":  "error",
+                       "title":  "The print spooler could not load a plug-in",
+                       "meaning":  "The print spooler failed to load a module, often from a printer driver.",
+                       "causes":  "A damaged or incompatible printer driver.",
+                       "next":  "Reinstall or update the printer driver named in the message.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-PrintService%20event%20808"
+                   }
+               ]
+}

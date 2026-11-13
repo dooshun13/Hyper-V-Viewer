@@ -1,0 +1,85 @@
+{
+    "schema":  1,
+    "id":  "group-policy",
+    "title":  "Group Policy",
+    "summary":  "Policy processing failures on domain-joined PCs.",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-GroupPolicy",
+                       "id":  1030,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Group Policy could not get the list of policies",
+                       "meaning":  "Windows could not ask the domain for the list of Group Policy objects.",
+                       "causes":  "A network or DNS problem, or no access to a domain controller.",
+                       "next":  "Check the network, DNS and that a domain controller can be reached, then run a policy update.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-GroupPolicy%20event%201030"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-GroupPolicy",
+                       "id":  1053,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Group Policy could not find the user or computer name",
+                       "meaning":  "Windows could not work out the user or computer name when processing policy.",
+                       "causes":  "A network or name lookup problem.",
+                       "next":  "Check the network connection and DNS, then run a policy update.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-GroupPolicy%20event%201053"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-GroupPolicy",
+                       "id":  1055,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Group Policy could not find the computer name",
+                       "meaning":  "Group Policy processing failed because Windows could not resolve a name.",
+                       "causes":  "A DNS or network problem with the domain controller.",
+                       "next":  "Check DNS settings and the connection to the domain controller.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-GroupPolicy%20event%201055"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-GroupPolicy",
+                       "id":  1058,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Group Policy could not read a policy file",
+                       "meaning":  "Windows could not read a policy file from the domain\u0027s shared policy folder.",
+                       "causes":  "A network, permissions or replication problem with the policy folder.",
+                       "next":  "Check that the policy folder can be opened from this PC and that the domain controllers replicate correctly.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-GroupPolicy%20event%201058"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-GroupPolicy",
+                       "id":  1085,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A Group Policy setting could not be applied",
+                       "meaning":  "Windows failed to apply one group of policy settings. The message names which.",
+                       "causes":  "A problem in that setting area or its local settings.",
+                       "next":  "Read the extension named in the message and check that area.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-GroupPolicy%20event%201085"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-GroupPolicy",
+                       "id":  1096,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Group Policy could not apply registry settings",
+                       "meaning":  "Windows could not apply the registry-based settings of a policy object.",
+                       "causes":  "A damaged policy file or a permissions problem.",
+                       "next":  "Check the policy object named in the message, and its permissions.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-GroupPolicy%20event%201096"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-GroupPolicy",
+                       "id":  1129,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Group Policy failed because of a network problem",
+                       "meaning":  "Policy processing failed because the PC could not reach a domain controller.",
+                       "causes":  "The network was not ready at start-up, a VPN was not connected, or a firewall blocks it.",
+                       "next":  "Check network and VPN connectivity at start-up, then run a policy update.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-GroupPolicy%20event%201129"
+                   }
+               ]
+}

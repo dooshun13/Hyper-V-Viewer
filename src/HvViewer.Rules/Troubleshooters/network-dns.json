@@ -1,0 +1,96 @@
+{
+    "schema":  1,
+    "id":  "network-dns",
+    "title":  "Network \u0026 DNS",
+    "summary":  "Name lookups, address conflicts, domain trust, time sync and secure connections.",
+    "events":  [
+                   {
+                       "provider":  "Microsoft-Windows-DNS-Client",
+                       "id":  1014,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A name lookup timed out",
+                       "meaning":  "Windows asked a DNS server to look up a name and got no answer in time. The message names it.",
+                       "causes":  "A slow or unreachable DNS server, a network problem, or a wrong DNS setting.",
+                       "next":  "Check the DNS servers set for the network adapter and that you can reach them.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-DNS-Client%20event%201014"
+                   },
+                   {
+                       "provider":  "Tcpip",
+                       "id":  4199,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "Another device is using this PC\u0027s IP address",
+                       "meaning":  "Windows found that another device on the network has the same IP address.",
+                       "causes":  "Two devices set to the same fixed address, or a DHCP problem.",
+                       "next":  "Give one of the devices a different address, or use automatic addressing.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Tcpip%20event%204199"
+                   },
+                   {
+                       "provider":  "NETLOGON",
+                       "id":  5719,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "No domain controller could be reached",
+                       "meaning":  "This PC could not find a domain controller to sign in with.",
+                       "causes":  "A network or DNS problem, a VPN that is not connected, or the controller is down.",
+                       "next":  "Check the network, DNS and VPN, and that the domain controller is reachable.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=NETLOGON%20event%205719"
+                   },
+                   {
+                       "provider":  "NETLOGON",
+                       "id":  3210,
+                       "log":  "System",
+                       "severity":  "error",
+                       "title":  "This PC could not authenticate with a domain controller",
+                       "meaning":  "The PC\u0027s trust with the domain failed, so it may deny sign-ins.",
+                       "causes":  "The PC\u0027s computer account password is out of date, or the account was removed.",
+                       "next":  "Check the domain connection. You may need to rejoin the PC to the domain.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=NETLOGON%20event%203210"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Time-Service",
+                       "id":  36,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "The clock has not synced for a long time",
+                       "meaning":  "The Windows Time service has not been able to sync the clock for a while.",
+                       "causes":  "The time source is unreachable, blocked, or set wrongly.",
+                       "next":  "Check the time source setting and that it can be reached.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Time-Service%20event%2036"
+                   },
+                   {
+                       "provider":  "Microsoft-Windows-Time-Service",
+                       "id":  129,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "The time service could not find a time source",
+                       "meaning":  "The Windows Time service could not set up a source to sync the clock with.",
+                       "causes":  "A DNS problem or an unreachable time server.",
+                       "next":  "Check DNS and the configured time server.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Microsoft-Windows-Time-Service%20event%20129"
+                   },
+                   {
+                       "provider":  "Schannel",
+                       "id":  36874,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A secure connection failed: no shared encryption",
+                       "meaning":  "A device tried to connect securely, but no encryption setting was supported by both sides.",
+                       "causes":  "An old program or device using outdated TLS settings.",
+                       "next":  "Update the program or device, or check the TLS settings on both sides.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Schannel%20event%2036874"
+                   },
+                   {
+                       "provider":  "Schannel",
+                       "id":  36887,
+                       "log":  "System",
+                       "severity":  "warning",
+                       "title":  "A secure connection received an error alert",
+                       "meaning":  "The other side of a secure connection sent a fatal alert and the connection was closed.",
+                       "causes":  "A certificate problem, a mismatch in settings or a broken connection.",
+                       "next":  "Check the alert code in the message and the certificate on the other side.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Schannel%20event%2036887"
+                   }
+               ]
+}

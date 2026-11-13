@@ -1,0 +1,33 @@
+# Build output
+bin/
+obj/
+out/
+publish/
+artifacts/
+*.zip
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.userprefs
+
+# Test results
+TestResults/
+*.trx
+coverage*.xml
+
+# Local settings written by HvViewer during development
+HvViewer.settings.json
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Executor scratch
+.superpowers/
+
+# Sample/perf logs hold event data from real machines: never commit them
+*.evtx

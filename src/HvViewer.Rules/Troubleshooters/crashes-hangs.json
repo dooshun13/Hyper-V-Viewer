@@ -1,0 +1,52 @@
+{
+    "schema":  1,
+    "id":  "crashes-hangs",
+    "title":  "Crashes \u0026 hangs",
+    "summary":  "Programs that crash or stop responding.",
+    "events":  [
+                   {
+                       "provider":  "Application Error",
+                       "id":  1000,
+                       "log":  "Application",
+                       "severity":  "error",
+                       "title":  "An application crashed",
+                       "meaning":  "A program stopped unexpectedly and Windows closed it. The message names the program and the module that failed.",
+                       "causes":  "A bug in the program or one of its DLLs, a bad update, or damaged files.",
+                       "next":  "Note the program and the faulting module. Update or reinstall the program, and check for recent changes.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Application%20Error%20event%201000"
+                   },
+                   {
+                       "provider":  "Application Hang",
+                       "id":  1002,
+                       "log":  "Application",
+                       "severity":  "error",
+                       "title":  "An application stopped responding",
+                       "meaning":  "A program stopped responding and was closed. The message names the program.",
+                       "causes":  "The program was busy or stuck, waiting on a slow disk or network, or a faulty add-in.",
+                       "next":  "Note the program. Update it, turn off add-ins, and check disk and network speed.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Application%20Hang%20event%201002"
+                   },
+                   {
+                       "provider":  "Windows Error Reporting",
+                       "id":  1001,
+                       "log":  "Application",
+                       "severity":  "info",
+                       "title":  "Windows saved a crash report",
+                       "meaning":  "Windows recorded details about a crash or hang, including a bucket ID and the report files.",
+                       "causes":  "It follows a program crash, hang or blue screen.",
+                       "next":  "Use it with the crash event just before it to see which program and module were involved.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=Windows%20Error%20Reporting%20event%201001"
+                   },
+                   {
+                       "provider":  ".NET Runtime",
+                       "id":  1026,
+                       "log":  "Application",
+                       "severity":  "error",
+                       "title":  "A .NET application crashed with an unhandled error",
+                       "meaning":  "A .NET program hit an error it did not handle and closed. The message includes the exception and stack trace.",
+                       "causes":  "A bug in the program, a missing file, or a wrong .NET version.",
+                       "next":  "Read the exception text at the top of the message. Update or reinstall the program, or install the .NET version it needs.",
+                       "docs":  "https://learn.microsoft.com/search/?terms=.NET%20Runtime%20event%201026"
+                   }
+               ]
+}

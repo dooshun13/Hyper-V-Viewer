@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>HvViewer.Machine</RootNamespace>
+    <AssemblyName>HvViewer.System</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Management" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HvViewer.Core\HvViewer.Core.csproj" />
+  </ItemGroup>
+</Project>
