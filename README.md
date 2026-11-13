@@ -2,6 +2,8 @@
 
 A read-only event-log viewer for Windows Server **Hyper-V hosts**, built for debugging Hyper-V problems. It is built from [Eviewer](https://github.com/dooshun13/eviewer) and is safe to run on production hosts.
 
+> **Status:** in development. The code is Eviewer renamed; the Hyper-V features below are planned in [`docs/superpowers/plans/2026-11-13-hvviewer-v1.md`](docs/superpowers/plans/2026-11-13-hvviewer-v1.md) and tracked as GitHub Issues (label `plan`).
+
 Open it on a host and within seconds see which VMs are unhealthy, what went wrong in the last 24 hours, and where to look, with plain-English explanations and next steps.
 
 ## What it does
@@ -36,5 +38,4 @@ dotnet publish src/HvViewer.App -c Release -r win-x64 --self-contained false -o 
 
 - Design: [`docs/superpowers/specs/2026-11-13-hvviewer-v1-design.md`](docs/superpowers/specs/2026-11-13-hvviewer-v1-design.md)
 - Build plan: [`docs/superpowers/plans/2026-11-13-hvviewer-v1.md`](docs/superpowers/plans/2026-11-13-hvviewer-v1.md)
-- Status: [`docs/status.md`](docs/status.md)
 - Eviewer history: [`docs/eviewer-base/`](docs/eviewer-base/)

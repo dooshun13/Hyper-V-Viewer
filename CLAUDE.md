@@ -5,7 +5,7 @@ Hyper-V Viewer (`HvViewer`) is a **read-only event-log viewer for Windows Server
 It is built from **Eviewer** (`dooshun13/eviewer`, copied and renamed on 2026-11-13). Unlike Eviewer, it is meant to run on **production Hyper-V hosts**, so the production-safety guardrails are back.
 
 **Source of truth:** `docs/superpowers/specs/2026-11-13-hvviewer-v1-design.md`. Read it before starting any work. If a request conflicts with the spec, stop and ask.
-**Build plan:** `docs/superpowers/plans/2026-11-13-hvviewer-v1.md`.
+**Build plan:** `docs/superpowers/plans/2026-11-13-hvviewer-v1.md`. Each task is also a GitHub Issue (label `plan`) with the same number; do them in order and close each with `Closes #N` in the commit.
 **Eviewer history:** `docs/eviewer-base/` (the original spec, plan and status; reference only).
 
 ## Rules (non-negotiable)
